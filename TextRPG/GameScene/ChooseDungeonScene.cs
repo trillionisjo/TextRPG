@@ -20,14 +20,14 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            var menuAction = new Dictionary<string, Action>() {
-                { "0", Game.ExitCurrentScene },
-                { "1", () => Game.CurrentScene = new EasyDungeonScene() },
-                { "2", () => Game.CurrentScene = new NormalDungeonScene() },
-                { "3", () => Game.CurrentScene = new HardDungeonScene() },
-            };
-            HandleMenuInput(menuAction);
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case 1: Game.EnterNewScene(new DungeonScene("쉬운 던전", 5, 1000, 0.4)); break;
+            case 2: Game.EnterNewScene(new DungeonScene("일반 던전", 11, 1700, 0.4)); break;
+            case 3: Game.EnterNewScene(new DungeonScene("어려운 던전", 17, 2500, 0.4)); break;
+            default: UpdateMessage(wrongInputMessage); break;
+            }
         }
     }
 }

@@ -2,11 +2,6 @@
 
 namespace TextRPG {
     public class ShopScene : GameScene {
-        protected const int NameWidth = -15;
-        protected const int StatWidth = -10;
-        protected const int DescWidth = -50;
-        protected const int PriceWidth = -8;
-
         protected override void WriteHeader () {
             Console.WriteLine("상점");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
@@ -30,26 +25,28 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            var menuAction = new Dictionary<string, Action>() {
-                { "0", Game.ExitCurrentScene },
-                { "1", () => Game.CurrentScene = new PurchaseScene() },
-                { "2", () => Game.CurrentScene = new SellScene() },
-            };
-            HandleMenuInput(menuAction);
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case 1: Game.EnterNewScene(new PurchaseScene()); break;
+            case 2: Game.EnterNewScene(new SellScene()); break;
+            default: UpdateMessage(wrongInputMessage); break;
+            }
         }
 
         private void WriteSaleItemList () {
             foreach (ShopItem shopItem in Game.ShopItemList) {
-                string stat = "";
-                string price = "";
-
-                if (shopItem.Item is Armor armor) {
+                string stat = "Unknown";
+                switch (shopItem.Item) {
+                case Armor armor:
                     stat = $"방어력 {armor.Defense:+#;-#;0}";
-                } else if (shopItem.Item is Weapon weapon) {
+                    break;
+                case Weapon weapon:
                     stat = $"공격력 {weapon.Attack:+#;-#;0}";
+                    break;
                 }
 
+                string price;
                 if (shopItem.IsSold) {
                     price = "구매완료";
                 } else {
@@ -61,7 +58,7 @@ namespace TextRPG {
         }
 
         private void WriteItemDetails(string name, string stat, string desc, string price) {
-            Console.WriteLine($"{WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)} | {price,8}");
+            Console.WriteLine($"{WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)} | {price, PriceWidth}");
         }
     }
 }

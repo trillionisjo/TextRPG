@@ -1,16 +1,24 @@
 ﻿using System;
+using System.Xml;
 
 namespace TextRPG {
-    public abstract class DungeonScene : GameScene {
+    public class DungeonScene : GameScene {
         protected int recommendedDefense;
         protected int rewardGold;
-        protected double chance;
+        protected double failChance;
 
         private int previousHealth;
         private int previousGold;
 
-        protected string name;
+        protected string dungeonName;
         private bool isDungeonCleared;
+
+        public DungeonScene(string dungeonName, int recommendedDefense, int rewardGold, double failChance) {
+            this.dungeonName = dungeonName;
+            this.recommendedDefense = recommendedDefense;
+            this.rewardGold = rewardGold;
+            this.failChance = failChance;
+        }
 
         protected void TryDungeon () {
             previousGold = Game.Player.Gold;
@@ -18,12 +26,10 @@ namespace TextRPG {
 
             isDungeonCleared = true;
             if (Game.Player.Defense < recommendedDefense) {
-                if (GetChance(chance)) {
+                if (GetChance(failChance)) {
                     isDungeonCleared = false;
                 }
             }
-
-            CalcResult();
         }
 
         private void CalcResult () {
@@ -59,15 +65,19 @@ namespace TextRPG {
             return new Random().NextDouble() < chance;
         }
 
+        protected override void DoBeforeWriting () {
+            TryDungeon();
+            CalcResult();
+        }
 
         protected override void WriteHeader () {
             if (isDungeonCleared) {
                 Console.WriteLine("던전 클리어");
                 Console.WriteLine("축하합니다!!");
-                Console.WriteLine($"{name}을 클리어 하였습니다.");
+                Console.WriteLine($"{dungeonName}을 클리어 하였습니다.");
             } else {
                 Console.WriteLine("던전 클리어 실패");
-                Console.WriteLine($"{name} 공략에 실패하였습니다.");
+                Console.WriteLine($"{dungeonName} 공략에 실패하였습니다.");
             }
             Console.WriteLine();
         }
@@ -83,17 +93,20 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
+        protected override int ReadInput () {
             if (Game.Player.Health <= 0) {
-                Game.Player.Health = 1;
-                Game.CurrentScene = new DeadScene();
-                return;
+                Game.Player.RestoreHelath();
+                return 1;
             }
+            return base.ReadInput();
+        }
 
-            var menuAction = new Dictionary<string, Action>() {
-                { "0", Game.ExitCurrentScene },
-            };
-            HandleMenuInput(menuAction);
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case 1: Game.EnterNewScene(new DeadScene()); break;
+            default: UpdateMessage(wrongInputMessage); break;
+            }
         }
     }
 }

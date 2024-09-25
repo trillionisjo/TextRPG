@@ -3,10 +3,6 @@ using System.Diagnostics.Tracing;
 
 namespace TextRPG {
     public class InventoryScene : GameScene {
-        static protected int NameWidth = -15;
-        static protected int StatWidth = 3;
-        static protected int DescWidth = -30;
-
         protected override void WriteHeader () {
             Console.WriteLine("인벤토리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
@@ -25,17 +21,15 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            var menuAction = new Dictionary<string, Action>() {
-                { "0", Game.ExitCurrentScene },
-                { "1", () => Game.CurrentScene = new EquipmodeScene()},
-            };
-            HandleMenuInput(menuAction);
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case 1: Game.EnterNewScene(new EquipmodeScene()); break;
+            default: UpdateMessage(wrongInputMessage); break;
+            }
         }
 
         protected virtual void WriteItemList() {
-
-            // 다형성을 이용했음에도 결국 switch로 분기해줘야 하나? 마음에 안든다...
             foreach (Item item in Game.PlayerItemList) {
                 string stat = "";
                 if (item is Armor armor) {
@@ -43,7 +37,6 @@ namespace TextRPG {
                 } else if (item is Weapon weapon) {
                     stat = $"공격력 +{weapon.Attack}";
                 }
-
                 WriteItemDetails(item.Name, stat, item.Desc);
             }
         }

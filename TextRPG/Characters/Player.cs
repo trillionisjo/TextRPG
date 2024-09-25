@@ -1,15 +1,34 @@
 ﻿using System;
 
 namespace TextRPG {
-    public class Player : Character, IWeaponEquipable, IArmorEquipable {
+    public class Player : IWeaponEquipable, IArmorEquipable {
+        public int Level { get; set; }
+        public int Health { get; set; }
+        public float Attack { get; set; }
+        public int WeaponAttack { get; set; }
+        public int Defense { get; set; }
+        public int ArmorDefense { get; set; }
+        protected Weapon EquiptedWeapon { get; set; }
+        protected Armor EquiptedArmor { get; set; }
+        public int Gold { get; set; }
         public string Class { get; set; }
-
         public int DungeonClearCount { get; set; }
 
-        public Player (int level, int health, float attack, int defense, int gold, string @class)
-            : base(level, health, attack, defense, gold) {
+        public Player (int level, int health, float attack, int defense, int gold, string @class) { 
+            Level = level;
+            Health = health;
+            Attack = attack;
+            Defense = defense;
+            Gold = gold;
             Class = @class;
             DungeonClearCount = 0;
+        }
+
+        public void ReduceGold(int amount) {
+            Gold -= amount;
+            if (Gold < 0) {
+                Gold = 0;
+            }
         }
 
         public void EquipWeapon (Weapon weapon) {
@@ -23,9 +42,9 @@ namespace TextRPG {
             if (EquiptedWeapon == null) {
                 return;
             }
-            EquiptedWeapon = null;
             Attack -= WeaponAttack;
             WeaponAttack = 0;
+            EquiptedWeapon = null;
         }
 
         public void ToggleWeapon (Weapon weapon) {
@@ -51,9 +70,9 @@ namespace TextRPG {
             if (EquiptedArmor == null) {
                 return;
             }
-            EquiptedWeapon = null;
             Defense -= ArmorDefense;
             ArmorDefense = 0;
+            EquiptedArmor = null;
         }
 
         public void ToggleArmor (Armor armor) {
@@ -82,7 +101,7 @@ namespace TextRPG {
             }
         }
 
-        public void MaxHealing() {
+        public void RestoreHelath() {
             Health = 100;
         }
 
@@ -94,11 +113,14 @@ namespace TextRPG {
             writer.WriteLine(Gold);
             writer.WriteLine(Class);
             writer.WriteLine(DungeonClearCount);
+            writer.WriteLine(EquiptedArmor == null ? "null" : EquiptedArmor.Name);
+            writer.WriteLine(EquiptedWeapon == null ? "null" : EquiptedWeapon.Name);
         }
 
         public void LoadData(StreamReader reader) {
             int intValue;
             float floatValue;
+            string name;
 
             int.TryParse(reader.ReadLine(), out intValue);
             Level = intValue;
@@ -119,6 +141,16 @@ namespace TextRPG {
 
             int.TryParse(reader.ReadLine(), out intValue);
             DungeonClearCount = intValue;
+
+            name = reader.ReadLine();
+            if (name != null && name != "null") {
+                EquiptedArmor = (Armor)Game.GetItemByName(name);
+            }
+
+            name = reader.ReadLine();
+            if (name != null && name != "null") {
+                EquiptedWeapon = (Weapon)Game.GetItemByName(name);
+            }
         }
 
 

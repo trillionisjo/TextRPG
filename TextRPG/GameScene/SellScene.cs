@@ -2,10 +2,6 @@
 
 namespace TextRPG {
     public class SellScene : GameScene {
-        protected const int NameWidth = -15;
-        protected const int StatWidth = -10;
-        protected const int DescWidth = -50;
-        protected const int PriceWidth = -8;
         protected const float rate = 0.85f;
 
         protected override void WriteHeader () {
@@ -27,17 +23,13 @@ namespace TextRPG {
             Console.WriteLine("0. 나가기");
         }
 
-        protected override void HandleInput () {
-            string input = Console.ReadLine() ?? string.Empty;
-
-            if (input == "0") {
-                Game.ExitCurrentScene();
-            }
-
-            if (int.TryParse(input, out var selectedIndex) && (0 < selectedIndex && selectedIndex <= Game.PlayerItemList.Count)) {
-                SellItem(selectedIndex - 1);
-            } else {
-                warningMessage = "!! 잘못된 입력입니다 !!";
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case int n when 0 < n && n <= Game.PlayerItemList.Count:
+                SellItem(n - 1);
+                break;
+            default: UpdateMessage(wrongInputMessage); break;
             }
         }
 
@@ -48,7 +40,6 @@ namespace TextRPG {
             case Weapon weapon:
                 Game.Player.UnequipWeapon();
                 break;
-
             case Armor armor:
                 Game.Player.UnequipArmor();
                 break;
@@ -63,6 +54,7 @@ namespace TextRPG {
             for (int i = 0; i < Game.ShopItemList.Count; i++) {
                 if (Game.ShopItemList[i].Item == item) {
                     Game.ShopItemList[i].IsSold = false;
+                    break;
                 }
             }
         }
@@ -70,21 +62,23 @@ namespace TextRPG {
         private void WriteItemList () {
             int count = 1;
             foreach (Item item in Game.PlayerItemList) {
-                string stat = "";
+                string stat = "Unknown";
                 string price = $"{(int)(item.Price * rate)} G";
 
-                if (item is Armor armor) {
+                switch (item) {
+                case Armor armor:
                     stat = $"방어력 {armor.Defense:+#;-#;0}";
-                } else if (item is Weapon weapon) {
+                    break;
+                case Weapon weapon:
                     stat = $"공격력 {weapon.Attack:+#;-#;0}";
+                    break;
                 }
-
                 WriteItemDetails(count++, item.Name, stat, item.Desc, price);
             }
         }
 
         private void WriteItemDetails (int number, string name, string stat, string desc, string price) {
-            Console.WriteLine($"- {number,2} {WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)} | {price,PriceWidth}");
+            Console.WriteLine($"- {number,2} {WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)} | {price, PriceWidth}");
         }
     }
 }

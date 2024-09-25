@@ -2,12 +2,6 @@
 
 namespace TextRPG {
     public class PlayerStateScene : GameScene {
-        private readonly Player player;
-
-        public PlayerStateScene(Player player) {
-            this.player = player;
-        }
-
         protected override void WriteHeader () {
             Console.WriteLine("상태 보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
@@ -15,15 +9,15 @@ namespace TextRPG {
         }
 
         protected override void WriteContent () {
-            string weaponAttack = player.WeaponAttack == 0 ? "" : $"{player.WeaponAttack:+#;-#}";
-            string armorDefense = player.ArmorDefense == 0 ? "" : $"{player.ArmorDefense:+#;-#}";
+            string weaponAttack = Game.Player.WeaponAttack == 0 ? "" : $"{Game.Player.WeaponAttack:+#;-#}";
+            string armorDefense = Game.Player.ArmorDefense == 0 ? "" : $"{Game.Player.ArmorDefense:+#;-#}";
 
-            Console.WriteLine($"Lv {player.Level:D2}");
-            Console.WriteLine($"Chad ( {player.Class} )");
-            Console.WriteLine($"공격력 : {player.Attack} {weaponAttack}");
-            Console.WriteLine($"방어력 : {player.Defense} {armorDefense}");
-            Console.WriteLine($"체력 : {player.Health}");
-            Console.WriteLine($"Gold : {player.Gold} G");
+            Console.WriteLine($"Lv {Game.Player.Level:D2}");
+            Console.WriteLine($"Chad ( {Game.Player.Class} )");
+            Console.WriteLine($"공격력 : {Game.Player.Attack} {weaponAttack}");
+            Console.WriteLine($"방어력 : {Game.Player.Defense} {armorDefense}");
+            Console.WriteLine($"체력 : {Game.Player.Health}");
+            Console.WriteLine($"Gold : {Game.Player.Gold} G");
             Console.WriteLine();
         }
 
@@ -32,11 +26,11 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            var menuAction = new Dictionary<string, Action>() {
-                { "0", Game.ExitCurrentScene },
-            };
-            HandleMenuInput(menuAction);
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            default: UpdateMessage(wrongInputMessage); break;
+            }
         }
     }
 }

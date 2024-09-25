@@ -2,11 +2,6 @@
 
 namespace TextRPG {
     public class PurchaseScene : GameScene {
-        protected const int NameWidth = -15;
-        protected const int StatWidth = -10;
-        protected const int DescWidth = -50;
-        protected const int PriceWidth = -8;
-
         protected override void WriteHeader () {
             Console.WriteLine("상점 - 아이템 구매");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
@@ -27,47 +22,46 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            string input = Console.ReadLine() ?? string.Empty;
-
-            if (input == "0") {
-                Game.ExitCurrentScene();
-            }
-
-            if (int.TryParse(input, out var selectedIndex) && (0 < selectedIndex && selectedIndex <= Game.ShopItemList.Count)) {
-                BuyItem(Game.ShopItemList[selectedIndex - 1]);
-            } else {
-                warningMessage = "!! 잘못된 입력입니다 !!";
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 0: Game.ExitCurrentScene(); break;
+            case int n when 0 < n && n <= Game.ShopItemList.Count:
+                BuyItem(Game.ShopItemList[n - 1]);
+                break;
+            default:
+                UpdateMessage(wrongInputMessage);
+                break;
             }
         }
 
         private void BuyItem (ShopItem shopItem) {
             if (shopItem.IsSold) {
-                warningMessage = "!! 이미 구매한 상품입니다 !!";
+                UpdateMessage(alreadyPurchasedItemMessage);
                 return;
             }
-
             if (Game.Player.Gold < shopItem.Item.Price) {
-                warningMessage = "!! 골드가 부족합니다 !!";
+                UpdateMessage(notEnoughGoldMessage);
                 return;
             }
-            Game.Player.Gold -= shopItem.Item.Price;
-
             shopItem.IsSold = true;
+            Game.Player.ReduceGold(shopItem.Item.Price);
             Game.PlayerItemList.Add(shopItem.Item);
-            warningMessage = null;
+            UpdateMessage(purchasedMessage);
         }
 
-        protected virtual void WriteSaleItemList () {
+        private void WriteSaleItemList () {
             int count = 1;
             foreach (ShopItem shopItem in Game.ShopItemList) {
-                string stat = "";
+                string stat = "Unknown";
                 string price = "";
 
-                if (shopItem.Item is Armor armor) {
+                switch (shopItem.Item) {
+                case Armor armor:
                     stat = $"방어력 {armor.Defense:+#;-#;0}";
-                } else if (shopItem.Item is Weapon weapon) {
+                    break;
+                case Weapon weapon:
                     stat = $"공격력 {weapon.Attack:+#;-#;0}";
+                    break;
                 }
 
                 if (shopItem.IsSold) {
@@ -80,7 +74,7 @@ namespace TextRPG {
             }
         }
 
-        protected virtual void WriteItemDetails (int number, string name, string stat, string desc, string price) {
+        private void WriteItemDetails (int number, string name, string stat, string desc, string price) {
             Console.WriteLine($"- {number,2} {WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)} | {price, PriceWidth}");
         }
     }

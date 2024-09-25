@@ -18,22 +18,21 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            string input = Console.ReadLine() ?? string.Empty;
-            int.TryParse(input, out var number);
-            
-            switch (number) {
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
             case 0: Game.ExitCurrentScene(); break;
             case 1: Rest(); break;
+            default: UpdateMessage(wrongInputMessage); break;
             }
         }
 
         private void Rest() {
             if (Game.Player.Gold >= cost) {
-                Game.Player.Gold -= cost;
-                Game.Player.MaxHealing();
+                Game.Player.ReduceGold(cost);
+                Game.Player.RestoreHelath();
+                UpdateMessage(restedMesaged);
             } else {
-                warningMessage = "!! 골드가 부족합니다 !!";
+                UpdateMessage(notEnoughGoldMessage);
             }
         }
     }

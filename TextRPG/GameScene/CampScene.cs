@@ -7,9 +7,6 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void WriteContent () {
-        }
-
         protected override void WriteMenu () {
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
@@ -21,36 +18,30 @@ namespace TextRPG {
             Console.WriteLine();
         }
 
-        protected override void HandleInput () {
-            string input = Console.ReadLine() ?? string.Empty;
-            int.TryParse(input, out var number);
-
-            switch (number) {
-            case 1: Game.CurrentScene = new PlayerStateScene(Game.Player); break;
-            case 2: Game.CurrentScene = new InventoryScene(); break;
-            case 3: Game.CurrentScene = new ShopScene(); break;
-            case 4: Game.CurrentScene = new ChooseDungeonScene(); break;
-            case 5: Game.CurrentScene = new RestScene(); break;
-            case 6: SaveManager.Save(); break;
-            case 7: SaveManager.Load(); break;
+        protected override void HandleInput (int selectedNumber) {
+            switch (selectedNumber) {
+            case 1: Game.EnterNewScene(new PlayerStateScene()); break;
+            case 2: Game.EnterNewScene(new InventoryScene()); break;
+            case 3: Game.EnterNewScene(new ShopScene()); break;
+            case 4: Game.EnterNewScene(new ChooseDungeonScene()); break;
+            case 5: Game.EnterNewScene(new RestScene()); break;
+            case 6: SaveData(); break;
+            case 7: LoadData(); break;
+            default: UpdateMessage(wrongInputMessage); break;
             }
         }
 
         private void LoadData() {
-            //Data? data = SaveManager.Load();
-            //if (data == null) {
-            //    warningMessage = "!! 저장된 데이터가 없습니다 !!";
-            //    return;
-            //}
-
-            //Game.Player = data.Player;
-            //Game.PlayerItemList = data.PlayerItems;
-            //Game.ShopItemList = data.ShopItems;
-            //warningMessage = "!! 불러오기 성공 !!";
+            if (SaveManager.Load()) {
+                UpdateMessage(loadedMeessage);
+            } else {
+                UpdateMessage(loadFailMessage);
+            }
         }
 
         private void SaveData() {
-            //SaveManager.Save();
+            SaveManager.Save();
+            UpdateMessage(savedMessage);
         }
     }
 }

@@ -5,13 +5,10 @@ namespace TextRPG {
     public static class Game {
         private static Stack<GameScene> scenes;
 
-        public static GameScene CurrentScene {
-            get { return scenes.Peek(); }
-            set { scenes.Push(value); }
-        }
+        // onenternewscene
+        public static Action OnEnterNewScene { get; set; }
 
-        
-
+        public static GameScene CurrentScene => scenes.Peek();
         public static Player Player { get; set; }
         public static List<Item> PlayerItemList { get; set; }
         public static List<ShopItem> ShopItemList { get; set; }
@@ -43,7 +40,7 @@ namespace TextRPG {
             ShopItemList.Add(new ShopItem(SpartanSpear, false));
 
             scenes = new Stack<GameScene>();
-            CurrentScene = new CampScene();
+            EnterNewScene(new CampScene());
         }
 
         public static void Start() {
@@ -60,6 +57,23 @@ namespace TextRPG {
         public static void GoBackToCampScene () {
             while (scenes.Count > 1) {
                 scenes.Pop();
+            }
+        }
+
+        public static void EnterNewScene(GameScene newScene) {
+            OnEnterNewScene?.Invoke();
+            scenes.Push(newScene);
+        }
+
+        public static Item GetItemByName (string name) {
+            switch (name) {
+            case "수련자의 갑옷": return TraineesArmor;
+            case "무쇠갑옷": return IronArmor;
+            case "스파르타의 갑옷": return SpartanArmor;
+            case "낡은 검": return WornSword;
+            case "청동 도끼": return BronzeAxe;
+            case "스파르타의 창": return SpartanSpear;
+            default: return null;
             }
         }
     }
