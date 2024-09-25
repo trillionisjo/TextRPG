@@ -2,7 +2,7 @@
 
 namespace TextRPG {
     public abstract class GameScene {
-        protected const int NameWidth = -15;
+        protected const int NameWidth = -18;
         protected const int StatWidth = -10;
         protected const int DescWidth = -50;
         protected const int PriceWidth = -8;

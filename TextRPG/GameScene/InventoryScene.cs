@@ -31,7 +31,9 @@ namespace TextRPG {
 
         private void WriteItemList() {
             foreach (Item item in Game.PlayerItemList) {
-                WriteItemDetails(item.Name, item.GetStatText(), item.Desc);
+                bool equipted = Game.Player.IsEquiptedItem(item);
+                string name = $"{(equipted ? "[E]" : "")}{item.Name}";
+                WriteItemDetails(name, item.GetStatText(), item.Desc);
             }
         }
 
