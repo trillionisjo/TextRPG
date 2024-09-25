@@ -15,5 +15,7 @@ namespace TextRPG {
             Price = price;
             Desc = desc;
         }
+
+        public abstract string GetStatText ();
     }
 }

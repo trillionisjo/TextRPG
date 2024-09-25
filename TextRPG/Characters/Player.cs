@@ -32,6 +32,57 @@ namespace TextRPG {
             }
         }
 
+        public void EquipItem(Item item) {
+            switch (item) {
+            case Armor armor:
+                ToggleArmor(armor);
+                break;
+
+            case Weapon weapon:
+                ToggleWeapon(weapon);
+                break;
+            }
+        }
+
+        public void UnequipItem (Item item) {
+            switch (item) {
+            case Armor armor:
+                if (EquiptedArmor != null && EquiptedArmor.Id == item.Id) {
+                    UnequipArmor();
+                }
+                break;
+
+            case Weapon weapon:
+                if (EquiptedWeapon != null && EquiptedWeapon.Id == item.Id) {
+                    UnequipWeapon();
+                }
+                break;
+            }
+        }
+
+        public bool IsEquiptedItem(Item item) {
+            switch (item) {
+            case Armor armor:
+                if (EquiptedArmor == null) {
+                    return false;
+                }
+                if (armor.Id != EquiptedArmor.Id) {
+                    return false;
+                }
+                return true;
+
+            case Weapon weapon:
+                if (EquiptedWeapon == null) {
+                    return false;
+                }
+                if (weapon.Id != EquiptedWeapon.Id) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public void EquipWeapon (Weapon weapon) {
             UnequipWeapon();
             EquiptedWeapon = weapon;

@@ -36,16 +36,6 @@ namespace TextRPG {
 
         private void WriteSaleItemList () {
             foreach (ShopItem shopItem in Game.ShopItemList) {
-                string stat = "Unknown";
-                switch (shopItem.Item) {
-                case Armor armor:
-                    stat = $"방어력 {armor.Defense:+#;-#;0}";
-                    break;
-                case Weapon weapon:
-                    stat = $"공격력 {weapon.Attack:+#;-#;0}";
-                    break;
-                }
-
                 string price;
                 if (shopItem.IsSold) {
                     price = "구매완료";
@@ -53,7 +43,7 @@ namespace TextRPG {
                     price = $"{shopItem.Item.Price} G";
                 }
 
-                WriteItemDetails(shopItem.Item.Name, stat, shopItem.Item.Desc, price);
+                WriteItemDetails(shopItem.Item.Name, shopItem.Item.GetStatText(), shopItem.Item.Desc, price);
             }
         }
 

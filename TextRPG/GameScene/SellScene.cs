@@ -36,16 +36,8 @@ namespace TextRPG {
         private void SellItem(int index) {
             Item item = Game.PlayerItemList[index];
 
-            switch (item) {
-            case Weapon weapon:
-                Game.Player.UnequipWeapon();
-                break;
-            case Armor armor:
-                Game.Player.UnequipArmor();
-                break;
-            }
-
             RestoreItem(item);
+            Game.Player.UnequipItem(item);
             Game.PlayerItemList.Remove(item);
             Game.Player.Gold += (int)(item.Price * rate);
         }

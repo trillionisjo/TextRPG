@@ -29,19 +29,13 @@ namespace TextRPG {
             }
         }
 
-        protected virtual void WriteItemList() {
+        private void WriteItemList() {
             foreach (Item item in Game.PlayerItemList) {
-                string stat = "";
-                if (item is Armor armor) {
-                    stat = $"방어력 +{armor.Defense}";
-                } else if (item is Weapon weapon) {
-                    stat = $"공격력 +{weapon.Attack}";
-                }
-                WriteItemDetails(item.Name, stat, item.Desc);
+                WriteItemDetails(item.Name, item.GetStatText(), item.Desc);
             }
         }
 
-        protected virtual void WriteItemDetails(string name, string stat, string desc) {
+        private void WriteItemDetails(string name, string stat, string desc) {
             Console.WriteLine($"{WriteHelper.PadKorean(name, NameWidth)} | {WriteHelper.PadKorean(stat, StatWidth)} | {WriteHelper.PadKorean(desc, DescWidth)}");
         }
     }

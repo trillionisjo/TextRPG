@@ -9,8 +9,8 @@ namespace TextRPG {
         }
 
         protected override void WriteContent () {
-            string weaponAttack = Game.Player.WeaponAttack == 0 ? "" : $"{Game.Player.WeaponAttack:+#;-#}";
-            string armorDefense = Game.Player.ArmorDefense == 0 ? "" : $"{Game.Player.ArmorDefense:+#;-#}";
+            string weaponAttack = Game.Player.GetEquiptedWeapon() == null ? "" : $"{Game.Player.WeaponAttack:+#;-#} ({Game.Player.GetEquiptedWeapon().Name})";
+            string armorDefense = Game.Player.GetEquiptedArmor() == null ? "" : $"{Game.Player.ArmorDefense:+#;-#} ({Game.Player.GetEquiptedArmor().Name})";
 
             Console.WriteLine($"Lv {Game.Player.Level:D2}");
             Console.WriteLine($"Chad ( {Game.Player.Class} )");

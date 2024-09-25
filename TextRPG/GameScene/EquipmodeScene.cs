@@ -21,9 +21,11 @@ namespace TextRPG {
 
         protected override void HandleInput (int selectedNumber) {
             switch (selectedNumber) {
-            case 0: Game.ExitCurrentScene(); break;
+            case 0:
+                Game.ExitCurrentScene();
+                break;
             case int n when 0 < n && n <= Game.PlayerItemList.Count:
-                EquipItem(Game.PlayerItemList[n - 1]);
+                Game.Player.EquipItem(Game.PlayerItemList[n - 1]);
                 break;
             default:
                 UpdateMessage(wrongInputMessage);
@@ -31,38 +33,12 @@ namespace TextRPG {
             }
         }
 
-        private void EquipItem (Item selectedItem) {
-            switch (selectedItem) {
-            case Weapon weapon:
-                Game.Player.ToggleWeapon(weapon);
-                break;
-
-            case Armor armor:
-                Game.Player.ToggleArmor(armor);
-                break;
-            }
-        }
-
         private void WriteItemList () {
             int count = 1;
             foreach (Item item in Game.PlayerItemList) {
-                string stat = "";
-                bool equipted = false;
-
-                if (item is Armor armor) {
-                    if (Game.Player.GetEquiptedArmor() == armor) {
-                        equipted = true;
-                    }
-                    stat = $"방어력 +{armor.Defense}";
-                } else if (item is Weapon weapon) {
-                    if (Game.Player.GetEquiptedWeapon() == weapon) {
-                        equipted = true;
-                    }
-                    stat = $"공격력 +{weapon.Attack}";
-                }
-                
+                bool equipted = Game.Player.IsEquiptedItem(item);                
                 string name = $"{(equipted ? "[E]" : "")}{item.Name}";
-                WriteItemDetails(count++, name, stat, item.Desc);
+                WriteItemDetails(count++, name, item.GetStatText(), item.Desc);
             }
         }
 
