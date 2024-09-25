@@ -3,17 +3,17 @@ using Newtonsoft.Json;
 
 namespace TextRPG {
     public class Player : IWeaponEquipable, IArmorEquipable {
-        [JsonProperty] public int Level { get; set; }
+        [JsonProperty] public int Level { get; protected set; }
         [JsonProperty] public int Health { get; set; }
-        [JsonProperty] public float Attack { get; set; }
-        [JsonProperty] public int WeaponAttack { get; set; }
-        [JsonProperty] public int Defense { get; set; }
-        [JsonProperty] public int ArmorDefense { get; set; }
-        [JsonProperty] protected Weapon EquiptedWeapon { get; set; }
-        [JsonProperty] protected Armor EquiptedArmor { get; set; }
+        [JsonProperty] public float Attack { get; protected set; }
+        [JsonProperty] public int WeaponAttack { get; protected set; }
+        [JsonProperty] public int Defense { get; protected set; }
+        [JsonProperty] public int ArmorDefense { get; protected set; }
+        [JsonProperty] public Weapon EquiptedWeapon { get; protected set; }
+        [JsonProperty] public Armor EquiptedArmor { get; protected set; }
         [JsonProperty] public int Gold { get; set; }
-        [JsonProperty] public string Class { get; set; }
-        [JsonProperty] public int DungeonClearCount { get; set; }
+        [JsonProperty] public string Class { get; protected set; }
+        [JsonProperty] public int DungeonClearCount { get; protected set; }
 
         public Player (int level, int health, float attack, int defense, int gold, string @class) { 
             Level = level;
@@ -107,10 +107,6 @@ namespace TextRPG {
             }
         }
 
-        public Weapon GetEquiptedWeapon () {
-            return EquiptedWeapon;
-        }
-
         public void EquipArmor (Armor armor) {
             UnequipArmor();
             EquiptedArmor = armor;
@@ -134,9 +130,6 @@ namespace TextRPG {
                 EquipArmor(armor);
             }
 
-        }
-        public Armor GetEquiptedArmor () {
-            return EquiptedArmor;
         }
 
         public void LevelUp() {

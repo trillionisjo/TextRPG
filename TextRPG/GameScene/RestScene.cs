@@ -2,11 +2,11 @@
 
 namespace TextRPG {
     public class RestScene : GameScene {
-        private int cost = 500;
+        private int restCostGold = 500;
 
         protected override void WriteHeader () {
             Console.WriteLine("휴식하기");
-            Console.WriteLine($"{cost} G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {Game.Player.Gold} G)");
+            Console.WriteLine($"{restCostGold} G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {Game.Player.Gold} G)");
             Console.WriteLine();
         }
         protected override void WriteContent () {
@@ -27,8 +27,8 @@ namespace TextRPG {
         }
 
         private void Rest() {
-            if (Game.Player.Gold >= cost) {
-                Game.Player.ReduceGold(cost);
+            if (Game.Player.Gold >= restCostGold) {
+                Game.Player.ReduceGold(restCostGold);
                 Game.Player.RestoreHelath();
                 UpdateMessage(restedMesaged);
             } else {
