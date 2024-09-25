@@ -1,18 +1,19 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace TextRPG {
     public class Player : IWeaponEquipable, IArmorEquipable {
-        public int Level { get; set; }
-        public int Health { get; set; }
-        public float Attack { get; set; }
-        public int WeaponAttack { get; set; }
-        public int Defense { get; set; }
-        public int ArmorDefense { get; set; }
-        protected Weapon EquiptedWeapon { get; set; }
-        protected Armor EquiptedArmor { get; set; }
-        public int Gold { get; set; }
-        public string Class { get; set; }
-        public int DungeonClearCount { get; set; }
+        [JsonProperty] public int Level { get; set; }
+        [JsonProperty] public int Health { get; set; }
+        [JsonProperty] public float Attack { get; set; }
+        [JsonProperty] public int WeaponAttack { get; set; }
+        [JsonProperty] public int Defense { get; set; }
+        [JsonProperty] public int ArmorDefense { get; set; }
+        [JsonProperty] protected Weapon EquiptedWeapon { get; set; }
+        [JsonProperty] protected Armor EquiptedArmor { get; set; }
+        [JsonProperty] public int Gold { get; set; }
+        [JsonProperty] public string Class { get; set; }
+        [JsonProperty] public int DungeonClearCount { get; set; }
 
         public Player (int level, int health, float attack, int defense, int gold, string @class) { 
             Level = level;

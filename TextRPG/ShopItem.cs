@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace TextRPG {
+    [Serializable]
     public class ShopItem {
-        public Item Item { get; set; }
-        public bool IsSold { get; set; }
+        [JsonProperty] public Item Item { get; set; }
+        [JsonProperty] public bool IsSold { get; set; }
 
         public ShopItem (Item item, bool isSold) {
             Item = item;

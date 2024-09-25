@@ -1,79 +1,39 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace TextRPG {
-    public class Data {
-        public Player Player { get; set; }
-        public List<Item> PlayerItems { get; set; }
-        public List<ShopItem> ShopItems { get; set; }
+    public class SaveData {
+        [JsonProperty] public Player Player { get; set; }
+        [JsonProperty] public List<Item> PlayerItems { get; set; }
+        [JsonProperty] public List<ShopItem> ShopItems { get; set; }
     }
 
     public static class SaveManager {
-        private static string fileName = "gamesave.txt";
+        private static readonly string path = "gamesave.txt";
+        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
 
         public static void Save() {
-            var stream = File.Open(fileName, FileMode.Create);
-            var writer = new StreamWriter(stream);
-            Game.Player.SaveData(writer);
-            SavePlayerItemList(writer);
-            SaveShopItemList(writer);
-            writer.Close();
+            var data = new SaveData {
+                Player = Game.Player,
+                PlayerItems = Game.PlayerItemList,
+                ShopItems = Game.ShopItemList,
+            };
+
+            string jsonString = JsonConvert.SerializeObject(data, settings);
+            File.WriteAllText(path, jsonString);
         }
 
         public static bool Load() {
-            if (!File.Exists(fileName)) {
+            if (!File.Exists(path)) {
                 return false;
             }
 
-            var stream = File.Open(fileName, FileMode.Open);
-            var reader = new StreamReader(stream);
-            Game.Player.LoadData(reader);
-            LoadPlayerItemList(reader);
-            LoadShopItemList(reader);
-            reader.Close();
-
+            string jsonString = File.ReadAllText(path);
+            var data = JsonConvert.DeserializeObject<SaveData>(jsonString, settings);
+            Game.Player = data.Player;
+            Game.PlayerItemList = data.PlayerItems;
+            Game.ShopItemList = data.ShopItems;
             return true;
-        }
-
-        public static void SavePlayerItemList(StreamWriter writer) {
-            writer.WriteLine(Game.PlayerItemList.Count);
-            for (int i = 0; i < Game.PlayerItemList.Count; i++) {
-                writer.WriteLine(Game.PlayerItemList[i].Name);
-            }
-        }
-
-        public static void LoadPlayerItemList(StreamReader reader) {
-            Game.PlayerItemList.Clear();
-            int.TryParse(reader.ReadLine(), out var count);
-            for (int i = 0; i < count; i++) {
-                string? name = reader.ReadLine();
-                if (name == null) {
-                    continue;
-                }
-                Game.PlayerItemList.Add(Game.GetItemByName(name));
-            }
-        }
-
-        public static void SaveShopItemList(StreamWriter writer) {
-            writer.WriteLine(Game.ShopItemList.Count);
-            for (int i = 0; i < Game.ShopItemList.Count; i++) {
-                writer.WriteLine(Game.ShopItemList[i].Item.Name);
-                writer.WriteLine(Game.ShopItemList[i].IsSold);
-            }
-        }
-
-        public static void LoadShopItemList (StreamReader reader) {
-            Game.ShopItemList.Clear();
-            int.TryParse(reader.ReadLine(), out var count);
-            for (int i = 0; i < count; i++) {
-                string? name = reader.ReadLine();
-                if (name == null) {
-                    continue;
-                }
-                bool.TryParse(reader.ReadLine(), out var isSold);
-                Game.ShopItemList.Add(new ShopItem(Game.GetItemByName(name), isSold));
-            }
         }
     }
 }

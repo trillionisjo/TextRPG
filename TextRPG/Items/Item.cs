@@ -1,10 +1,12 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace TextRPG {
+    [Serializable]
     public abstract class Item {
-        public string Name { get; set; }
-        public int Price { get; set; }
-        public string Desc { get; set; }
+        [JsonProperty] public string Name { get; set; }
+        [JsonProperty] public int Price { get; set; }
+        [JsonProperty] public string Desc { get; set; }
 
         public Item(string name, int price, string desc) {
             Name = name;
