@@ -100,7 +100,7 @@ namespace TextRPG {
         }
 
         public void ToggleWeapon (Weapon weapon) {
-            if (EquiptedWeapon == weapon) {
+            if (EquiptedWeapon.Id == weapon.Id) {
                 UnequipWeapon();
             } else {
                 EquipWeapon(weapon);
@@ -124,7 +124,7 @@ namespace TextRPG {
         }
 
         public void ToggleArmor (Armor armor) {
-            if (EquiptedArmor == armor) {
+            if (EquiptedArmor.Id == armor.Id) {
                 UnequipArmor();
             } else {
                 EquipArmor(armor);
