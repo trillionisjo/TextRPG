@@ -24,7 +24,7 @@ namespace TextRPG {
         protected override void HandleInput (int selectedNumber) {
             switch (selectedNumber) {
             case 0: Game.ExitCurrentScene(); break;
-            case 1: Game.EnterNewScene(new EquipmodeScene()); break;
+            case 1: EnterNewScene(new EquipmodeScene()); break;
             default: UpdateMessage(wrongInputMessage); break;
             }
         }

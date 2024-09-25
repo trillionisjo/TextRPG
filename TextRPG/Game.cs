@@ -6,7 +6,6 @@ namespace TextRPG {
     public static class Game {
         private static Stack<GameScene> scenes;
 
-        // onenternewscene
         public static Action OnEnterNewScene { get; set; }
 
         public static GameScene CurrentScene => scenes.Peek();
@@ -22,12 +21,12 @@ namespace TextRPG {
         public static Weapon SpartanSpear { get; private set; }
 
         private static void Init() {
-            TraineesArmor = new Armor("수련자의 갑옷", 1000, "수련에 도움을 주는 갑옷입니다", 5);
-            IronArmor = new Armor("무쇠갑옷", 2000, "무쇠로 만들어져 튼튼한 갑옷입니다.", 9);
-            SpartanArmor = new Armor("스파르타의 갑옷", 3500, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 15);
-            WornSword = new Weapon("낡은 검", 600, "쉽게 볼 수 있는 낡은 검 입니다.", 2);
-            BronzeAxe = new Weapon("청동 도끼", 1500, "어디선가 사용됐던거 같은 도끼입니다.", 5);
-            SpartanSpear = new Weapon("스파르타의 창", 3000, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7);
+            TraineesArmor = new Armor(100, "수련자의 갑옷", 1000, "수련에 도움을 주는 갑옷입니다", 5);
+            IronArmor = new Armor(101, "무쇠갑옷", 2000, "무쇠로 만들어져 튼튼한 갑옷입니다.", 9);
+            SpartanArmor = new Armor(102, "스파르타의 갑옷", 3500, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 15);
+            WornSword = new Weapon(200, "낡은 검", 600, "쉽게 볼 수 있는 낡은 검 입니다.", 2);
+            BronzeAxe = new Weapon(201, "청동 도끼", 1500, "어디선가 사용됐던거 같은 도끼입니다.", 5);
+            SpartanSpear = new Weapon(202, "스파르타의 창", 3000, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7);
 
             Player = new Player(1, 100, 10, 5, 1500, "전사");
             PlayerItemList = new List<Item>();
@@ -52,6 +51,7 @@ namespace TextRPG {
         }
 
         public static void ExitCurrentScene() {
+            //CurrentScene.IDispose
             scenes.Pop();
         }
 
@@ -61,7 +61,7 @@ namespace TextRPG {
             }
         }
 
-        public static void EnterNewScene(GameScene newScene) {
+        public static void EnterNewScene (GameScene newScene) {
             OnEnterNewScene?.Invoke();
             scenes.Push(newScene);
         }

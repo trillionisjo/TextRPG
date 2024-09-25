@@ -28,8 +28,8 @@ namespace TextRPG {
         protected override void HandleInput (int selectedNumber) {
             switch (selectedNumber) {
             case 0: Game.ExitCurrentScene(); break;
-            case 1: Game.EnterNewScene(new PurchaseScene()); break;
-            case 2: Game.EnterNewScene(new SellScene()); break;
+            case 1: EnterNewScene(new PurchaseScene()); break;
+            case 2: EnterNewScene(new SellScene()); break;
             default: UpdateMessage(wrongInputMessage); break;
             }
         }

@@ -104,7 +104,7 @@ namespace TextRPG {
         protected override void HandleInput (int selectedNumber) {
             switch (selectedNumber) {
             case 0: Game.ExitCurrentScene(); break;
-            case 1: Game.EnterNewScene(new DeadScene()); break;
+            case 1: EnterNewScene(new DeadScene()); break;
             default: UpdateMessage(wrongInputMessage); break;
             }
         }

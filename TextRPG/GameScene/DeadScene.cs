@@ -5,6 +5,7 @@ namespace TextRPG {
         protected override void WriteHeader () {
             Console.WriteLine("당신은 죽었습니다.");
             Console.WriteLine("죽음으로 인해 당신은 골드를 잃어버리게 됩니다.");
+            Console.WriteLine();
         }
 
         protected override void WriteContent () {

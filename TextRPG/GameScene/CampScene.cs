@@ -20,11 +20,11 @@ namespace TextRPG {
 
         protected override void HandleInput (int selectedNumber) {
             switch (selectedNumber) {
-            case 1: Game.EnterNewScene(new PlayerStateScene()); break;
-            case 2: Game.EnterNewScene(new InventoryScene()); break;
-            case 3: Game.EnterNewScene(new ShopScene()); break;
-            case 4: Game.EnterNewScene(new ChooseDungeonScene()); break;
-            case 5: Game.EnterNewScene(new RestScene()); break;
+            case 1: EnterNewScene(new PlayerStateScene()); break;
+            case 2: EnterNewScene(new InventoryScene()); break;
+            case 3: EnterNewScene(new ShopScene()); break;
+            case 4: EnterNewScene(new ChooseDungeonScene()); break;
+            case 5: EnterNewScene(new RestScene()); break;
             case 6: SaveData(); break;
             case 7: LoadData(); break;
             default: UpdateMessage(wrongInputMessage); break;

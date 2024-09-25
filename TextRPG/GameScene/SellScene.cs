@@ -52,7 +52,7 @@ namespace TextRPG {
 
         private void RestoreItem(Item item) {
             for (int i = 0; i < Game.ShopItemList.Count; i++) {
-                if (Game.ShopItemList[i].Item == item) {
+                if (Game.ShopItemList[i].Item.Id == item.Id) {
                     Game.ShopItemList[i].IsSold = false;
                     break;
                 }

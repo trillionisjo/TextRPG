@@ -16,16 +16,7 @@ namespace TextRPG {
         protected const string loadFailMessage= "불러오기를 실패하였습니다. ";
         protected const string savedMessage = "저장을 완료하였습니다.";
 
-
         protected string message;
-
-        public GameScene() {
-            Game.OnEnterNewScene += ClearMessage;
-        }
-
-        ~GameScene() {
-            Game.OnEnterNewScene -= ClearMessage;
-        }
 
         protected virtual void DoBeforeWriting () {
         }
@@ -76,6 +67,11 @@ namespace TextRPG {
 
         protected void ClearMessage () {
             message = null;
+        }
+
+        protected void EnterNewScene(GameScene scene) {
+            ClearMessage();
+            Game.EnterNewScene(scene);
         }
     }
 }

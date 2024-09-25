@@ -105,56 +105,6 @@ namespace TextRPG {
         public void RestoreHelath() {
             Health = 100;
         }
-
-        public void SaveData(StreamWriter writer) {
-            writer.WriteLine(Level);
-            writer.WriteLine(Health);
-            writer.WriteLine(Attack);
-            writer.WriteLine(Defense);
-            writer.WriteLine(Gold);
-            writer.WriteLine(Class);
-            writer.WriteLine(DungeonClearCount);
-            writer.WriteLine(EquiptedArmor == null ? "null" : EquiptedArmor.Name);
-            writer.WriteLine(EquiptedWeapon == null ? "null" : EquiptedWeapon.Name);
-        }
-
-        public void LoadData(StreamReader reader) {
-            int intValue;
-            float floatValue;
-            string name;
-
-            int.TryParse(reader.ReadLine(), out intValue);
-            Level = intValue;
-
-            int.TryParse(reader.ReadLine(), out intValue);
-            Health = intValue;
-
-            float.TryParse(reader.ReadLine(), out floatValue);
-            Attack = floatValue;
-
-            int.TryParse(reader.ReadLine(), out intValue);
-            Defense = intValue;
-
-            int.TryParse(reader.ReadLine(), out intValue);
-            Gold = intValue;
-
-            Class = reader.ReadLine();
-
-            int.TryParse(reader.ReadLine(), out intValue);
-            DungeonClearCount = intValue;
-
-            name = reader.ReadLine();
-            if (name != null && name != "null") {
-                EquiptedArmor = (Armor)Game.GetItemByName(name);
-            }
-
-            name = reader.ReadLine();
-            if (name != null && name != "null") {
-                EquiptedWeapon = (Weapon)Game.GetItemByName(name);
-            }
-        }
-
-
     }
         
 }
